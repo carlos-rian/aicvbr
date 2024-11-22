@@ -1,6 +1,7 @@
 {
     "material-icon-theme.folders.associations": {
-        "crawler": "batch"
+        "crawler": "batch",
+        "ai": "fastlane",
     },
     "[python]": {
         "editor.rulers": [
