@@ -31,7 +31,7 @@ class Expirience(BaseModel):
     description: str  # experience > description
     company_name: str  # experience > companyName
     location_name: str  # experience > locationName
-    company: Company  # experience > company
+    company: Company | None = None  # experience > company
 
 
 class Education(BaseModel):
