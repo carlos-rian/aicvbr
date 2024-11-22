@@ -3,7 +3,7 @@ name = "aicvbr"
 version = "0.1.0"
 description = "Generate CV from linkedin profile and job description using AI"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.13"
 dependencies = [
     "bs4>=0.0.2",
     "fastapi>=0.115.5",
