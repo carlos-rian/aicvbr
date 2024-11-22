@@ -13,5 +13,16 @@
         },
         "editor.defaultFormatter": "charliermarsh.ruff",
         "editor.bracketPairColorization.enabled": true
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/.venv": true,
+        "**/__pycache__": true,
+        "**/.ruff**": true,
     }
 }
