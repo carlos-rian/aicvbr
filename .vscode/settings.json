@@ -1,0 +1,16 @@
+{
+    "material-icon-theme.folders.associations": {
+        "crawler": "batch"
+    },
+    "[python]": {
+        "editor.rulers": [
+            120
+        ],
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        },
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.bracketPairColorization.enabled": true
+    }
+}

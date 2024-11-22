@@ -1,0 +1,18 @@
+{
+    "recommendations": [
+        "ms-python.python",
+        "charliermarsh.ruff",
+        "fill-labs.dependi",
+        "github.copilot",
+        "github.copilot-chat",
+        "github.vscode-github-actions",
+        "grapecity.gc-excelviewer",
+        "humao.rest-client",
+        "mechatroner.rainbow-csv",
+        "ms-python.debugpy",
+        "ms-python.isort",
+        "ms-python.mypy-type-checker",
+        "ms-python.vscode-pylance",
+        "tamasfe.even-better-toml"
+    ]
+}
