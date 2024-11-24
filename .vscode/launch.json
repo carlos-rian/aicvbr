@@ -10,9 +10,10 @@
             "request": "launch",
             "module": "uvicorn",
             "args": [
-                "--factory",
-                "src.api.main:create_app()",
-                "--reload"
+                "src.main:app",
+                "--reload",
+                "--env-file",
+                ".env"
             ],
             "jinja": true
         }
