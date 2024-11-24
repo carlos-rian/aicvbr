@@ -1,5 +1,6 @@
 import json
 from enum import Enum
+from textwrap import dedent
 
 from linkedin_api import Linkedin
 
@@ -92,6 +93,7 @@ class Profile(BaseModel):
 class LinkedinCrawler:
     def __init__(self, username: str, password: str):
         self.api = Linkedin(username=username, password=password)
+        self.profile = None
 
     def get_profile_skills(self, urn_id: str) -> list:
         skills = self.api.get_profile_skills(urn_id=urn_id)
@@ -107,4 +109,112 @@ class LinkedinCrawler:
         Logger.info(f"Profile found: {json.dumps(profile, indent=2)}")
         profile = Profile.model_validate(profile)
         profile.skills = self.get_profile_skills(urn_id=profile.urn_id)
+        self.profile = profile
         return profile
+
+    def _format_experience(self) -> Expirience:
+        if not self.profile.experience:
+            return "Not informed"
+
+        def get_employee_count_range(company: Company | None) -> str:
+            if not company:
+                return "Not informed"
+
+            return f"{company.employee_count_range.start} - {company.employee_count_range.end or '-'}"
+
+        text = ""
+        for idx, experience in enumerate(self.profile.experience):
+            text += dedent(f"""
+Experience {idx}:
+ - Title: {experience.title}
+ - Company Name: {experience.company_name}
+ - Location Name: {experience.location_name or "Not informed"}
+ - Employee Count Range: {get_employee_count_range(experience.company)}
+ - Industries: {', '.join(experience.company.industries) if experience.company else "Not informed"}
+ - Description: {experience.description or "Not informed"}
+\n""")
+
+        return dedent(text)
+
+    def _format_education(self) -> str:
+        if not self.profile.education:
+            return "Not informed"
+
+        text = ""
+
+        for idx, education in enumerate(self.profile.education):
+            end_date = "Not informed"
+            if education.time_period.end_date:
+                end_date = f"{education.time_period.end_date.year}/{education.time_period.end_date.month or '-'}"
+
+            text += dedent(f"""
+Education {idx}:
+ - Degree Name: {education.degree_name or "Not informed"}
+ - Field of Study: {education.field_of_study}
+ - School Name: {education.school_name}
+ - Start Date: {education.time_period.start_date.year}/{education.time_period.start_date.month or '-'}
+ - End Date: {end_date}
+\n""")
+
+        return dedent(text)
+
+    def _format_certifications(self) -> str:
+        if not self.profile.certifications:
+            return "Not informed"
+
+        text = ""
+
+        for idx, certification in enumerate(self.profile.certifications):
+            end_date = "Not informed"
+            if certification.time_period.end_date:
+                end_date = (
+                    f"{certification.time_period.end_date.year}/{certification.time_period.end_date.month or '-'}"
+                )
+
+            text += dedent(f"""
+Certification {idx}:
+ - Authority: {certification.authority}
+ - Name: {certification.name}
+ - Start Date: {certification.time_period.start_date.year}/{certification.time_period.start_date.month or '-'}
+ - End Date: {end_date}
+\n""")
+
+        return dedent(text)
+
+    def _format_languages(self) -> str:
+        text = ""
+
+        for idx, language in enumerate(self.profile.languages):
+            text += dedent(f"""
+Language {idx}:
+ - Name: {language.name}
+ - Proficiency: {language.proficiency}
+\n""")
+
+        return dedent(text)
+
+    def _format_skills(self) -> str:
+        return ", ".join([skill.name for skill in self.profile.skills])
+
+    def format_as_text(self):
+        return dedent(f"""
+Profile:
+ - Headline: {self.profile.headline}
+ - Summary: {self.profile.summary}
+ - Location: {self.profile.geo_country_name} - {self.profile.geo_location_name}
+ - Industry: {self.profile.industry_name}
+
+Experiences:
+{self._format_experience()}
+
+Educations:
+{self._format_education()}
+
+Certifications:
+{self._format_certifications()}
+
+Languages:
+{self._format_languages()}
+
+Skills: {self._format_skills()}
+""")
