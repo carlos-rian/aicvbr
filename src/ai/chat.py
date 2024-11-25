@@ -1,6 +1,12 @@
-from langchain_ollama import ChatOllama
+from langchain_openai import ChatOpenAI
 
-model = ChatOllama(model="llama3.2")
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    temperature=0,
+    max_tokens=None,
+    timeout=None,
+    max_retries=2,
+)
 
 
 async def ollama_message(site_content: str, linkedin_perfil: str) -> str:
@@ -21,6 +27,6 @@ Based on my linkedin profile and the job vacancy, generate a curriculum for me.
         {"role": "user", "content": message},
     ]
 
-    stream = await model.ainvoke(messages)
+    stream = await llm.ainvoke(messages)
     async for content in stream:
         print(content, end="", flush=True)
