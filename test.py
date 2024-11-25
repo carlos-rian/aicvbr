@@ -1,7 +1,7 @@
 import logging
 import os
 
-from src.ai.lamma3 import ollama_message
+from src.ai.chat import ollama_message
 from src.const import LINKEDIN_PASSWORD, LINKEDIN_USERNAME
 from src.crawler.linkedin import LinkedinCrawler
 from src.crawler.sites import get_site_content
@@ -17,7 +17,7 @@ profile = crawler.get_profile(public_id=PUBLIC_ID)
 async def main():
     profile_content = crawler.format_as_text()
     site_content = await get_site_content(
-        url="https://magnasistemas.gupy.io/job/eyJqb2JJZCI6ODA3NTY1MSwic291cmNlIjoiZ3VweV9wb3J0YWwifQ==?jobBoardSource=gupy_portal"
+        url="https://gruponexxees.gupy.io/job/eyJqb2JJZCI6ODEzODA1Mywic291cmNlIjoiZ3VweV9wb3J0YWwifQ==?jobBoardSource=gupy_portal"
     )
 
     await ollama_message(site_content=site_content.content, linkedin_perfil=profile_content)
