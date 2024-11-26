@@ -15,10 +15,14 @@ dependencies = [
     "pysqlx-engine>=0.3.2",
     "uvicorn>=0.32.1",
     "langchain-openai>=0.2.9",
+    "unstructured[md]>=0.16.6",
+    "langchain-community>=0.3.7",
+    "faiss-cpu>=1.9.0.post1",
 ]
 
 [dependency-groups]
 dev = [
+    "html2text>=2024.2.26",
     "isort>=5.13.2",
     "pytest>=8.3.3",
     "pytest-asyncio>=0.24.0",
@@ -43,9 +47,9 @@ docstring-code-line-length = "dynamic"
 #ignore = ["E402", "F403", "F405"]
 fixable = ["ALL"]
 
-[tool.ruff.lint.isort]
-case-sensitive = true
-combine-as-imports = true
+# [tool.ruff.lint.isort]
+# case-sensitive = true
+# combine-as-imports = true
 
 [tool.pytest.ini_options]
 pythonpaths = "."
