@@ -125,7 +125,7 @@ class LinkedinCrawler:
         text = ""
         for idx, experience in enumerate(self.profile.experience):
             text += dedent(f"""
-Experience {idx}:
+### Experience {idx}:
  - Title: {experience.title}
  - Company Name: {experience.company_name}
  - Location Name: {experience.location_name or "Not informed"}
@@ -148,7 +148,7 @@ Experience {idx}:
                 end_date = f"{education.time_period.end_date.year}/{education.time_period.end_date.month or '-'}"
 
             text += dedent(f"""
-Education {idx}:
+### Education {idx}:
  - Degree Name: {education.degree_name or "Not informed"}
  - Field of Study: {education.field_of_study}
  - School Name: {education.school_name}
@@ -172,7 +172,7 @@ Education {idx}:
                 )
 
             text += dedent(f"""
-Certification {idx}:
+### Certification {idx}:
  - Authority: {certification.authority}
  - Name: {certification.name}
  - Start Date: {certification.time_period.start_date.year}/{certification.time_period.start_date.month or '-'}
@@ -186,7 +186,7 @@ Certification {idx}:
 
         for idx, language in enumerate(self.profile.languages):
             text += dedent(f"""
-Language {idx}:
+### Language {idx}:
  - Name: {language.name}
  - Proficiency: {language.proficiency}
 \n""")
@@ -194,27 +194,33 @@ Language {idx}:
         return dedent(text)
 
     def _format_skills(self) -> str:
-        return ", ".join([skill.name for skill in self.profile.skills])
+        return ", ".join([skill.name for skill in self.profile.skills]) if self.profile.skills else "Not informed"
 
-    def format_as_text(self):
+    def _format_as_text(self):
         return dedent(f"""
-Profile:
+## Profile:
  - Headline: {self.profile.headline}
  - Summary: {self.profile.summary}
  - Location: {self.profile.geo_country_name} - {self.profile.geo_location_name}
  - Industry: {self.profile.industry_name}
 
-Experiences:
+## Experiences:
 {self._format_experience()}
 
-Educations:
+## Educations:
 {self._format_education()}
 
-Certifications:
+## Certifications:
 {self._format_certifications()}
 
-Languages:
+## Languages:
 {self._format_languages()}
 
-Skills: {self._format_skills()}
+## Skills: 
+{self._format_skills()}
 """)
+
+    def save_as_markdown(self, path: str):
+        with open(path, "w") as file:
+            file.write(self._format_as_text())
+        Logger.info(f"Profile saved as markdown: {path}")
