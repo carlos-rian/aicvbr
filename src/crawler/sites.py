@@ -1,5 +1,6 @@
 import textwrap
 
+import html2text
 from bs4 import BeautifulSoup
 from bs4.element import Comment
 from fastapi import status
@@ -61,19 +62,24 @@ async def check_url_is_valid(url: str, client: AsyncClient = default_client) -> 
         )
 
 
-def filter_visible_tags(element):
-    if element.parent.name in ["style", "script", "head", "title", "meta", "[document]"]:
-        return False
-    if isinstance(element, Comment):
-        return False
-    return True
-
-
-def text_from_html(body):
+def filter_visible_html(body):
     soup = BeautifulSoup(body, "html.parser")
-    texts = soup.findAll(text=True)
-    visible_texts = filter(filter_visible_tags, texts)
-    return " ".join(t.strip() for t in visible_texts)
+
+    # Remove unwanted tags (like <style>, <script>, etc.)
+    for tag in soup(["style", "script", "head", "title", "meta", "[document]"]):
+        tag.decompose()
+
+    # Remove comments
+    for comment in soup.findAll(string=lambda text: isinstance(text, Comment)):
+        comment.extract()
+
+    # Return the cleaned-up HTML
+    return str(soup)
+
+
+def html_to_markdown(body):
+    clean_html = filter_visible_html(body)
+    return html2text.html2text(clean_html)
 
 
 async def get_site_content(url: str) -> CheckURL:
@@ -83,7 +89,7 @@ async def get_site_content(url: str) -> CheckURL:
         Logger.error(f"Error to get site content: {url} - {response.status_code}\n{response.content}")
         return response
 
-    text = text_from_html(response.content)
+    text = html_to_markdown(response.content)
     content = textwrap.dedent(text)
     response.content = content
 
