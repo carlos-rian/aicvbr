@@ -24,6 +24,7 @@ dependencies = [
 dev = [
     "html2text>=2024.2.26",
     "isort>=5.13.2",
+    "langdetect>=1.0.9",
     "pytest>=8.3.3",
     "pytest-asyncio>=0.24.0",
     "python-dotenv>=1.0.1",
