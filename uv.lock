@@ -29,6 +29,7 @@ dependencies = [
 dev = [
     { name = "html2text" },
     { name = "isort" },
+    { name = "langdetect" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "python-dotenv" },
@@ -57,6 +58,7 @@ requires-dist = [
 dev = [
     { name = "html2text", specifier = ">=2024.2.26" },
     { name = "isort", specifier = ">=5.13.2" },
+    { name = "langdetect", specifier = ">=1.0.9" },
     { name = "pytest", specifier = ">=8.3.3" },
     { name = "pytest-asyncio", specifier = ">=0.24.0" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
